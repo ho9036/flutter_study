@@ -1,6 +1,6 @@
-import 'package:actual2/common/component/custom_text_form_field.dart';
-import 'package:actual2/user/view/login_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'common/view/splash_screen.dart';
 
 void main() {
   runApp(const _App());
@@ -16,9 +16,9 @@ class _App extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'NotoSans',
       ),
-      home: Scaffold(
+      home: const Scaffold(
         backgroundColor: Colors.white,
-        body: LoginScreen()
+        body: SplashScreen()
       ),
     );
   }

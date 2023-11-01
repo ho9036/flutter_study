@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:actual2/common/const/colors.dart';
+import 'package:actual2/common/const/data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../common/component/custom_text_form_field.dart';
@@ -18,12 +19,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String emailValue = '';
   String passwordValue = '';
+  String loginUrl = 'http://112.151.207.96:7400/api/auth/login';
 
   @override
   Widget build(BuildContext context) {
     final dio = Dio();
-
-    final ip = '';
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -64,17 +64,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         Codec<String, String> stringToBase64 = utf8.fuse(base64);
                         String token = stringToBase64.encode(rawString);
 
-                        final response = await dio.post("http://$ip/api/auth/login",
-                          options: Options(
-                            headers: {
-                              'Authorization': 'Basic $token',
-                            },
-                          ));
+                        final response = await dio.postUri(Uri.parse(loginUrl),
+                            options: Options(
+                              headers: {
+                                'Authorization': 'Basic $token'
+                              },
+                            ));
 
-                        var data = response.data;
+                        final refreshToken = response.data['refreshToken'];
+                        final accessToken = response.data['accessToken'];
 
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const RootTab())
+                        await storage.write(key: refreshTokenKey, value: refreshToken);
+                        await storage.write(key: accessTokenKey, value: accessToken);
+
+                        if (!context.mounted) return;
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (_) => const RootTab()),
+                                (route) => false
                         );
                       },
                       style: ElevatedButton.styleFrom(
