@@ -19,12 +19,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String emailValue = '';
   String passwordValue = '';
-  String loginUrl = 'http://112.151.207.96:7400/api/auth/login';
 
   @override
   Widget build(BuildContext context) {
-    final dio = Dio();
-
     return DefaultLayout(
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

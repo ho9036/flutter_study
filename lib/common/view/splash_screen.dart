@@ -37,6 +37,13 @@ class _SplashScreenState extends State<SplashScreen>{
               (route) => false
       );
     }else{
+      final response = await dio.postUri(Uri.parse(loginUrl),
+          options: Options(
+            headers: {
+              'Authorization': 'Basic $token'
+            },
+          ));
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const RootTab()),
               (route) => false
